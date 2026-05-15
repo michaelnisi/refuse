@@ -40,11 +40,11 @@ struct Refuse: AsyncParsableCommand {
             }
         }
         let catalogCount = byCatalog.count
-        print("\n\(unused.count) unused asset(s) across \(catalogCount) catalog(s)")
+        print("\n\(unused.count) unused assets across \(catalogCount) catalogs")
 
         guard delete else { return }
 
-        print("\nDelete \(unused.count) unused asset(s)? [y/N] ", terminator: "")
+        print("\nDelete \(unused.count) unused assets? [y/N] ", terminator: "")
         guard readLine()?.lowercased() == "y" else {
             print("Aborted.")
             return
@@ -56,6 +56,6 @@ struct Refuse: AsyncParsableCommand {
             try fm.removeItem(at: item.asset.url)
             deleted += 1
         }
-        print("Deleted \(deleted) asset(s).")
+        print("Deleted \(deleted) assets.")
     }
 }
