@@ -16,16 +16,22 @@ struct Refuse: AsyncParsableCommand {
 
     mutating func run() async throws {
         let root = URL(filePath: path).standardized
+        let scanner = UsageScanner(root: root)
 
         let assets = try AssetScanner(root: root).assets()
         guard !assets.isEmpty else {
-            print("No asset catalogs found under \(root.path).")
+            printErr("No asset catalogs found under \(root.path).")
             return
         }
+        let catalogCount = Set(assets.map(\.catalog)).count
+        printErr("Found \(assets.count) assets across \(catalogCount) catalogs")
 
-        let unused = try await UsageScanner(root: root).unusedAssets(from: assets)
+        let sources = scanner.collectSwiftFiles()
+        printErr("Scanning \(sources.count) Swift files...")
+
+        let unused = try await scanner.unusedAssets(from: assets, sources: sources)
         guard !unused.isEmpty else {
-            print("No unused assets found.")
+            printErr("No unused assets found.")
             return
         }
 
@@ -39,23 +45,25 @@ struct Refuse: AsyncParsableCommand {
                 print("  \(name)\(item.asset.kind.rawValue)")
             }
         }
-        let catalogCount = byCatalog.count
-        print("\n\(unused.count) unused assets across \(catalogCount) catalogs")
+        print("\n\(unused.count) unused assets across \(byCatalog.count) catalogs")
 
-        guard delete else { return }
-
-        print("\nDelete \(unused.count) unused assets? [y/N] ", terminator: "")
-        guard readLine()?.lowercased() == "y" else {
-            print("Aborted.")
-            return
+        if delete {
+            print("\nDelete \(unused.count) unused assets? [y/N] ", terminator: "")
+            guard readLine()?.lowercased() == "y" else {
+                print("Aborted.")
+                return
+            }
+            let fm = FileManager.default
+            for item in unused {
+                try fm.removeItem(at: item.asset.url)
+            }
+            print("Deleted \(unused.count) assets.")
         }
 
-        let fm = FileManager.default
-        var deleted = 0
-        for item in unused {
-            try fm.removeItem(at: item.asset.url)
-            deleted += 1
-        }
-        print("Deleted \(deleted) assets.")
+        throw ExitCode(1)
     }
+}
+
+private func printErr(_ message: String) {
+    fputs(message + "\n", stderr)
 }

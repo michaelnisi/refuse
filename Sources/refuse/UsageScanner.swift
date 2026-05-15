@@ -5,8 +5,8 @@ import SwiftSyntax
 struct UsageScanner {
     let root: URL
 
-    func unusedAssets(from assets: [Asset]) async throws -> [UnusedAsset] {
-        let (strings, members) = try await swiftCorpus()
+    func unusedAssets(from assets: [Asset], sources: [URL]) async throws -> [UnusedAsset] {
+        let (strings, members) = try await swiftCorpus(from: sources)
         return assets
             .filter { !isUsed($0, strings: strings, members: members) }
             .map { UnusedAsset(asset: $0) }
@@ -16,8 +16,7 @@ struct UsageScanner {
         strings.contains(asset.name) || members.contains(asset.name.camelCased())
     }
 
-    private func swiftCorpus() async throws -> (strings: Set<String>, members: Set<String>) {
-        let files = collectSwiftFiles()
+    private func swiftCorpus(from files: [URL]) async throws -> (strings: Set<String>, members: Set<String>) {
         var strings = Set<String>()
         var members = Set<String>()
 
@@ -39,7 +38,7 @@ struct UsageScanner {
         return (strings, members)
     }
 
-    private func collectSwiftFiles() -> [URL] {
+    func collectSwiftFiles() -> [URL] {
         var files: [URL] = []
         let fm = FileManager.default
         guard let enumerator = fm.enumerator(
