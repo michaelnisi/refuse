@@ -4,7 +4,7 @@ CLI tool that finds (and optionally deletes) unused visual assets in Xcode proje
 
 ## What it does
 
-Scans `.xcassets` catalogs for image, color, symbol, and font assets, then parses Swift source files to determine which assets are never referenced. Reports unused assets grouped by catalog.
+Scans `.xcassets` catalogs for image, color, and symbol assets, then parses Swift source files to determine which assets are never referenced. Reports unused assets grouped by catalog.
 
 ## Architecture
 
@@ -24,7 +24,8 @@ Asset names are converted to camelCase for identifier matching (`my_icon` → `m
 ## Scope
 
 - Only Swift source files are scanned
-- Only visual assets: `.imageset`, `.colorset`, `.symbolset`, `.fontset`
+- Only visual assets: `.imageset`, `.colorset`, `.symbolset`
+- Font assets (`.fontset`) are out of scope — referenced by PostScript name, not asset name
 - Storyboards and XIBs are intentionally excluded
 - Target membership is not considered — an asset is "used" if referenced anywhere across the whole project
 

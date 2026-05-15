@@ -4,7 +4,7 @@ A Swift CLI tool that finds unused visual assets in Xcode projects.
 
 ## What it does
 
-`refuse` scans an Xcode project or workspace for `.xcassets` catalogs, collects all image, color, symbol, and font assets, then parses Swift source files to find which assets are never referenced anywhere. It understands both string literal references (`UIImage(named: "my_icon")`) and generated resource identifier references (`Image(.myIcon)`).
+`refuse` scans an Xcode project or workspace for `.xcassets` catalogs, collects all image, color, and symbol assets, then parses Swift source files to find which assets are never referenced anywhere. It understands both string literal references (`UIImage(named: "my_icon")`) and generated resource identifier references (`Image(.myIcon)`).
 
 Built for large multi-target apps — the Swift source corpus is parsed concurrently.
 
@@ -54,4 +54,5 @@ Colors.xcassets
 ## Limitations
 
 - Only Swift source files are scanned. Objective-C and Interface Builder files are not.
+- Font assets (`.fontset`) are not supported — fonts are referenced by PostScript name, not asset name.
 - Assets referenced via computed strings or loaded from remote config will be reported as unused.
