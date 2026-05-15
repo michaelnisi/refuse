@@ -1,2 +1,2 @@
-/// Directory names that are never scanned for assets or source files.
-let excludedDirectories: Set<String> = ["Pods", "Carthage"]
+/// Vendor directory names skipped by both scanners when running from an app root.
+let excludedDirectories: Set<String> = ["Pods", "Carthage", "vendor"]
