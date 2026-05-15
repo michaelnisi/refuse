@@ -31,11 +31,16 @@ struct Refuse: AsyncParsableCommand {
 
         let byCatalog = Dictionary(grouping: unused) { $0.asset.catalog }
         for (catalog, items) in byCatalog.sorted(by: { $0.key.path < $1.key.path }) {
-            print("\n\(catalog.lastPathComponent)")
-            for item in items.sorted(by: { $0.asset.name < $1.asset.name }) {
-                print("  \(item.asset.kind.rawValue)  \(item.asset.name)")
+            let sorted = items.sorted(by: { $0.asset.name < $1.asset.name })
+            let longestName = sorted.map(\.asset.name.count).max() ?? 0
+            print("\n\(catalog.lastPathComponent) (\(sorted.count))")
+            for item in sorted {
+                let name = item.asset.name.padding(toLength: longestName + 2, withPad: " ", startingAt: 0)
+                print("  \(name)\(item.asset.kind.rawValue)")
             }
         }
+        let catalogCount = byCatalog.count
+        print("\n\(unused.count) unused asset(s) across \(catalogCount) catalog(s)")
 
         guard delete else { return }
 
