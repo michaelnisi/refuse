@@ -10,7 +10,6 @@ struct Asset {
         case imageset
         case colorset
         case symbolset
-        case fontset
 
         var suffix: String { ".\(rawValue)" }
     }
