@@ -14,7 +14,7 @@ struct Refuse: AsyncParsableCommand {
     @Flag(name: .shortAndLong, help: "Delete unused assets after confirmation.")
     var delete: Bool = false
 
-    @Flag(name: .shortAndLong, help: "Suppress progress output.")
+    @Flag(name: .shortAndLong, help: "Suppress progress output (errors are always shown).")
     var silent: Bool = false
 
     mutating func run() async throws {
@@ -23,7 +23,7 @@ struct Refuse: AsyncParsableCommand {
 
         let assets = try AssetScanner(root: root).assets()
         guard !assets.isEmpty else {
-            printErr("No asset catalogs found under \(root.path).")
+            fputs("No asset catalogs found under \(root.path).\n", stderr)
             return
         }
         let catalogCount = Set(assets.map(\.catalog)).count
@@ -65,6 +65,7 @@ struct Refuse: AsyncParsableCommand {
 
         throw ExitCode(1)
     }
+
     private func printErr(_ message: String) {
         guard !silent else { return }
         fputs(message + "\n", stderr)
