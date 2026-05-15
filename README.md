@@ -39,16 +39,28 @@ refuse -d
 
 ## Output
 
-Unused assets are printed grouped by catalog:
+Progress is written to stderr, results to stdout:
 
 ```
-Icons.xcassets
-  imageset  arrow_back
-  imageset  placeholder_avatar
-  symbolset old_custom_symbol
+Found 1247 assets across 8 catalogs
+Scanning 342 Swift files...
 
-Colors.xcassets
-  colorset  legacy_tint
+Colors.xcassets (1)
+  deprecated_red    colorset
+
+Icons.xcassets (2)
+  another_unused    imageset
+  unused_symbol     symbolset
+
+5 unused assets across 2 catalogs
+```
+
+## CI
+
+`refuse` exits with code `1` when unused assets are found, `0` when the project is clean. To suppress progress output:
+
+```sh
+refuse 2>/dev/null
 ```
 
 ## Limitations
