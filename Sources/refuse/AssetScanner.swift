@@ -13,6 +13,10 @@ struct AssetScanner {
         ) else { return [] }
 
         for case let url as URL in enumerator {
+            if excludedDirectories.contains(url.lastPathComponent) {
+                enumerator.skipDescendants()
+                continue
+            }
             guard url.pathExtension == "xcassets" else { continue }
             result += try assetsInCatalog(url)
             enumerator.skipDescendants()

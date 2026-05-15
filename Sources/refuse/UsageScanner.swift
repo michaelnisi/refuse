@@ -48,8 +48,14 @@ struct UsageScanner {
             options: [.skipsHiddenFiles]
         ) else { return [] }
 
-        for case let url as URL in enumerator where url.pathExtension == "swift" {
-            files.append(url)
+        for case let url as URL in enumerator {
+            if excludedDirectories.contains(url.lastPathComponent) {
+                enumerator.skipDescendants()
+                continue
+            }
+            if url.pathExtension == "swift" {
+                files.append(url)
+            }
         }
         return files
     }
