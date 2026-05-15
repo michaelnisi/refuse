@@ -5,11 +5,9 @@ import SwiftSyntax
 struct UsageScanner {
     let root: URL
 
-    func unusedAssets(from assets: [Asset], sources: [URL]) async throws -> [UnusedAsset] {
+    func unusedAssets(from assets: [Asset], sources: [URL]) async throws -> [Asset] {
         let (strings, members) = try await swiftCorpus(from: sources)
-        return assets
-            .filter { !isUsed($0, strings: strings, members: members) }
-            .map { UnusedAsset(asset: $0) }
+        return assets.filter { !isUsed($0, strings: strings, members: members) }
     }
 
     private func isUsed(_ asset: Asset, strings: Set<String>, members: Set<String>) -> Bool {
@@ -43,7 +41,7 @@ struct UsageScanner {
         let fm = FileManager.default
         guard let enumerator = fm.enumerator(
             at: root,
-            includingPropertiesForKeys: [.isRegularFileKey],
+            includingPropertiesForKeys: nil,
             options: [.skipsHiddenFiles]
         ) else { return [] }
 
@@ -73,8 +71,12 @@ private final class AssetUsageVisitor: SyntaxVisitor {
         return .visitChildren
     }
 
-    override func visit(_ node: MemberAccessExprSyntax) -> SyntaxVisitorContinueKind {
-        memberNames.insert(node.declName.baseName.text)
+    override func visit(_ node: FunctionCallExprSyntax) -> SyntaxVisitorContinueKind {
+        for arg in node.arguments {
+            if let member = arg.expression.as(MemberAccessExprSyntax.self) {
+                memberNames.insert(member.declName.baseName.text)
+            }
+        }
         return .visitChildren
     }
 }

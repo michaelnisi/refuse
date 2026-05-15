@@ -35,14 +35,14 @@ struct Refuse: AsyncParsableCommand {
             return
         }
 
-        let byCatalog = Dictionary(grouping: unused) { $0.asset.catalog }
+        let byCatalog = Dictionary(grouping: unused) { $0.catalog }
         for (catalog, items) in byCatalog.sorted(by: { $0.key.path < $1.key.path }) {
-            let sorted = items.sorted(by: { $0.asset.name < $1.asset.name })
-            let longestName = sorted.map(\.asset.name.count).max() ?? 0
+            let sorted = items.sorted(by: { $0.name < $1.name })
+            let longestName = sorted.map(\.name.count).max() ?? 0
             print("\n\(catalog.lastPathComponent) (\(sorted.count))")
             for item in sorted {
-                let name = item.asset.name.padding(toLength: longestName + 2, withPad: " ", startingAt: 0)
-                print("  \(name)\(item.asset.kind.rawValue)")
+                let name = item.name.padding(toLength: longestName + 2, withPad: " ", startingAt: 0)
+                print("  \(name)\(item.kind.rawValue)")
             }
         }
         print("\n\(unused.count) unused assets across \(byCatalog.count) catalogs")
@@ -55,9 +55,10 @@ struct Refuse: AsyncParsableCommand {
             }
             let fm = FileManager.default
             for item in unused {
-                try fm.removeItem(at: item.asset.url)
+                try fm.removeItem(at: item.url)
             }
             print("Deleted \(unused.count) assets.")
+            return
         }
 
         throw ExitCode(1)

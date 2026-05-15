@@ -52,7 +52,7 @@ Icons.xcassets (2)
   another_unused    imageset
   unused_symbol     symbolset
 
-5 unused assets across 2 catalogs
+3 unused assets across 2 catalogs
 ```
 
 ## CI
@@ -68,3 +68,4 @@ refuse 2>/dev/null
 - Only Swift source files are scanned. Objective-C and Interface Builder files are not.
 - Font assets (`.fontset`) are not supported — fonts are referenced by PostScript name, not asset name.
 - Assets referenced via computed strings or loaded from remote config will be reported as unused.
+- Generated resource identifiers (e.g. `.myIcon`) are only recognised when passed directly as a call argument. Assets accessed via a variable or intermediate expression will be reported as unused.
