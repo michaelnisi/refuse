@@ -51,6 +51,32 @@ Colors.xcassets
   colorset  legacy_tint
 ```
 
+## Testing
+
+A script is included that generates a local test fixture with a known mix of used and unused assets:
+
+```sh
+./Scripts/generate-test-fixture.sh
+swift run refuse TestFixture
+```
+
+Expected output:
+
+```
+Colors.xcassets
+  colorset  deprecated_red
+
+Icons.xcassets
+  imageset  another_unused
+  symbolset  unused_symbol
+
+Images.xcassets
+  imageset  legacy_splash
+  imageset  old_banner
+```
+
+`TestFixture/` is listed in `.gitignore` and is safe to delete at any time.
+
 ## Limitations
 
 - Only Swift source files are scanned. Objective-C and Interface Builder files are not.
