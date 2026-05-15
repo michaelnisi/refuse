@@ -14,6 +14,9 @@ struct Refuse: AsyncParsableCommand {
     @Flag(name: .shortAndLong, help: "Delete unused assets after confirmation.")
     var delete: Bool = false
 
+    @Flag(name: .shortAndLong, help: "Suppress progress output.")
+    var silent: Bool = false
+
     mutating func run() async throws {
         let root = URL(filePath: path).standardized
         let scanner = UsageScanner(root: root)
@@ -62,8 +65,8 @@ struct Refuse: AsyncParsableCommand {
 
         throw ExitCode(1)
     }
-}
-
-private func printErr(_ message: String) {
-    fputs(message + "\n", stderr)
+    private func printErr(_ message: String) {
+        guard !silent else { return }
+        fputs(message + "\n", stderr)
+    }
 }
