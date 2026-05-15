@@ -24,4 +24,10 @@ struct CamelCaseTests {
     @Test func trailingNumber()    { #expect("icon_2x".camelCased() == "icon2x") }
     @Test func embeddedNumber()    { #expect("my_2x_icon".camelCased() == "my2xIcon") }
     @Test func numberOnly()        { #expect("icon64".camelCased() == "icon64") }
+
+    // All-caps sequences — Xcode behaviour is undocumented; we pin our own output here
+    @Test func leadingAllCaps()    { #expect("URL_icon".camelCased() == "uRLIcon") }
+    @Test func trailingAllCaps()   { #expect("icon_URL".camelCased() == "iconURL") }
+    @Test func embeddedAllCaps()   { #expect("MY_URL_icon".camelCased() == "mYURLIcon") }
+    @Test func shortAllCaps()      { #expect("API_key".camelCased() == "aPIKey") }
 }

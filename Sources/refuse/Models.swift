@@ -10,11 +10,5 @@ struct Asset {
         case imageset
         case colorset
         case symbolset
-
-        var suffix: String { ".\(rawValue)" }
     }
-}
-
-struct UnusedAsset {
-    let asset: Asset
 }
