@@ -11,7 +11,7 @@ Scans `.xcassets` catalogs for image, color, and symbol assets, then parses Swif
 - `AssetScanner` — walks the directory tree, finds `.xcassets` bundles, returns `[Asset]`
 - `UsageScanner` — collects Swift source files, parses them concurrently with SwiftSyntax, builds a corpus of string literals and member access identifiers; exposes `collectSwiftFiles()` so `RefuseCLI` can report progress before scanning
 - `Models` — `Asset` (name, catalog, kind, url) and `UnusedAsset`
-- `RefuseCLI` — `AsyncParsableCommand` entry point; progress to stderr, results to stdout, optional deletion with confirmation (`-d`)
+- `RefuseCLI` — `AsyncParsableCommand` entry point; progress to stderr, results to stdout, optional silent mode (`-s`), optional deletion with confirmation (`-d`)
 - `String+CamelCase` — converts asset names to lowerCamelCase for identifier matching
 - `Exclusions` — vendor directories skipped by both scanners (`Pods`, `Carthage`, `vendor`)
 

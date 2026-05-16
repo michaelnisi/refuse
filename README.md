@@ -14,7 +14,7 @@ Built for large multi-target apps — the Swift source corpus is parsed concurre
 git clone https://github.com/michaelnisi/refuse
 cd refuse
 swift build -c release
-cp .build/release/refuse /usr/local/bin/refuse
+sudo cp .build/release/refuse /usr/local/bin/refuse
 ```
 
 ## Usage
@@ -57,10 +57,10 @@ Icons.xcassets (2)
 
 ## CI
 
-`refuse` exits with code `1` when unused assets are found, `0` when the project is clean. To suppress progress output:
+`refuse` exits with code `1` when unused assets are found, `0` when the project is clean. Use `-s` to suppress progress output while keeping error messages visible:
 
 ```sh
-refuse 2>/dev/null
+refuse -s
 ```
 
 ## Limitations
