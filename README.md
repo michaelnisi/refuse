@@ -14,7 +14,7 @@ Built for large multi-target apps — the Swift source corpus is parsed concurre
 git clone https://github.com/michaelnisi/refuse
 cd refuse
 swift build -c release
-cp .build/release/refuse /usr/local/bin/refuse
+sudo cp .build/release/refuse /usr/local/bin/refuse
 ```
 
 ## Usage
