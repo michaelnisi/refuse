@@ -57,13 +57,11 @@ Icons.xcassets (2)
 
 ## CI
 
-`refuse` exits with code `1` when unused assets are found, `0` when the project is clean. Use `-s` to suppress progress output while keeping error messages visible (e.g. no catalogs found):
+`refuse` exits with code `1` when unused assets are found, `0` when the project is clean. Use `-s` to suppress progress output while keeping error messages visible:
 
 ```sh
 refuse -s
 ```
-
-To suppress all stderr output, use shell redirection: `refuse 2>/dev/null`.
 
 ## Limitations
 
